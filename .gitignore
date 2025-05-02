@@ -1,0 +1,9 @@
+# grafana data
+grafana/data
+grafana/plugins
+
+# postgres data
+postgres
+
+# env files
+.env
