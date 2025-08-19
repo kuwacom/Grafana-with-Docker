@@ -15,6 +15,7 @@ services:
     container_name: grafana
     depends_on:
       - postgres
+      - prometheus
     ports:
       - "3000:3000"
     restart: unless-stopped
@@ -30,6 +31,22 @@ services:
       # - ./grafana/config:/etc/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/plugins:/var/lib/grafana/plugins
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/config:/etc/prometheus
+      - ./prometheus/data:/prometheus
+    ports:
+      - "9090:9090"
+
+  snmp-exporter:
+    image: prom/snmp-exporter:latest
+    container_name: snmp-exporter
+    volumes:
+      - ./prometheus/exporter/snmp/snmp.yaml:/etc/snmp_exporter/snmp.yaml:ro
+    ports:
+      - "9116:9116"
 
   cloudflared:
     image: cloudflare/cloudflared
